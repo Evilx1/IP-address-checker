@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jersey+25&display=swap" rel="stylesheet">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+             font-family: "Jersey 25";
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        body {
+            background-color: black;
+            color: white;
+        }
+
+        .container {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .status {
+            border: 2px solid white;
+            padding: 30px;
+            font-size: 30px;
+        }
+
+        .container p {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Status checking!</h1>
+        <div class="status">
+            <p>
+                <strong>Status:</strong>
+                <span id="StatusCheck">Checking.....</span>
+            </p>
+            <p>
+                <Strong>Ip Address:</Strong>
+                <span id="ip"> ...</span>
+            </p>
+            <p>
+                <Strong>Network strength:</Strong>
+                <span id="nets"> ...</span>
+            </p>
+        </div>
+    </div>
+    <script>
+        window.addEventListener("load",scheck())
+
+        function scheck(){
+            
+            const status = document.getElementById("StatusCheck");
+            const ip = document.getElementById("ip");
+            const nets = document.getElementById("nets");
+
+
+            if(navigator.onLine){
+                fetch('https://api.ipify.org?format=json')
+               .then((response)=> response.json())
+               .then((data)=>{
+                console.log(data.ip)
+                status.textContent="Online"
+                ip.textContent= data.ip;
+
+                const connection= navigator.connection
+                const ns = connection ?connection.downlink + "mbps" : "error";
+                nets.textContent= ns
+               })
+               .catch(()=>{
+                status.textContent="Offline"
+                ip.textContent="0.00.000.0000"
+                nets.textContent="0 MBPS"
+               })
+                
+            }
+            else{
+                status.textContent="Offline"
+                ip.textContent="0.00.000.0000"
+                nets.textContent="0 MBPS"
+            }
+        }
+    </script>
+</body>
+
+</html>
